@@ -8,9 +8,6 @@ so that they can organize and plan the business.
 
 * [Installation](#installation)
 * [Usage](#usage)
-* [License](#license)
-* [Contributing](#contributing)
-* [Tests](#tests)
 * [Questions](#questions)
 
 
