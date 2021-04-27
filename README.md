@@ -26,11 +26,15 @@ Walk through video:
 https://drive.google.com/file/d/1w2NrxDArYlXoXfIzl7NJMEnxrR6v0Kcr/view
 <br/>
 
-![ScreenShot1]('./assets/images/ss1.png') <br/>
-![ScreenShot2]('./assets/images/ss2.png') <br/>
-![ScreenShot3]('./assets/images/ss3.png') <br/>
-![ScreenShot4]('./assets/images/ss4.png') <br/>
-![ScreenShot5]('./assets/images/ss5.png') <br/>
+![ScreenShot1](./images/ss1.png) <br/>
+
+![ScreenShot2](./images/ss2.png) <br/>
+
+![ScreenShot3](./images/ss3.png) <br/>
+
+![ScreenShot4](./images/ss4.png) <br/>
+
+![ScreenShot5](./images/ss5.png) <br/>
 
 ## Questions
 View my Github Profile at [CynthiaMohan](http://github.com/CynthiaMohan)
