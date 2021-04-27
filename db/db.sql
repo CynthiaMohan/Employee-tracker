@@ -1,2 +1,2 @@
-CREATE DATABASE emptracker;
-USE emptracker;
+CREATE DATABASE tracker;
+USE tracker;
