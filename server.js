@@ -4,12 +4,6 @@ const inquirer = require('inquirer');
 
 const consoleTable = require('console.table');
 const chalk = require('chalk');
-const { response } = require('express');
-// const { response } = require('express');
-// const { title } = require('node:process');
-// const { response } = require('express');
-// const { start } = require('node:repl');
-// const { end } = require('./db/connection');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const menuOptions = [
@@ -264,68 +258,82 @@ const addAnEmployee = () => {
     });
 }
 const updateEmployee = () => {
+    // viewAllEmployees();
     const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.id AS "role_id"
     FROM employee, role, department WHERE department.id = role.department_id AND role.id = employee.role_id;`;
-    db.query(sql, (err, result) => {
+    // db.query(sql, (err, result) => {
+    //     if (err) throw err;
+    //     let employeeArray = [];
+    //     console.table(result);
+    //     result.forEach((employee) => {
+    //         employeeArray.push(`${employee.first_name} ${employee.last_name}`);
+    //     });
+    // console.log(employeeArray);
+
+    const sqlRoles = `SELECT role.id,role.title FROM role;`;
+    db.query(sqlRoles, (err, result) => {
         if (err) throw err;
-        let employeeArray = [];
-        // console.log(result);
-        result.forEach((employee) => {
-            employeeArray.push(`${employee.first_name} ${employee.last_name}`);
+        let rolesArr = [];
+        result.forEach(role => {
+            rolesArr.push(role.title);
         });
-        // console.log(employeeArray);
-
-        const sqlRoles = `SELECT role.id,role.title FROM role;`;
-        db.query(sqlRoles, (err, result) => {
-            if (err) throw err;
-            let rolesArr = [];
-            result.forEach(role => {
-                rolesArr.push(role.title);
-            });
-            // console.log(rolesArr);
+        // console.log(rolesArr);
 
 
-            inquirer.prompt([
-                {
-                    type: 'list',
-                    name: 'employee_updated',
-                    message: 'Please select the employee whose Role needs to be Updated: ',
-                    choices: employeeArray
-                },
-                {
-                    type: 'list',
-                    name: 'newRole',
-                    message: 'Please select the updated Role',
-                    choices: rolesArr
+        inquirer.prompt([
+            {
+                type: 'input',
+                name: 'employeeId',
+                message: 'Please enter the employee ID whose Role needs to be Updated: ',
+                validate: empId => {
+                    if (empId) {
+                        return true;
+                    }
+                    else {
+                        console.log('Please enter a valid Employee ID to continue.')
+                        return false;
+                    }
                 }
-            ]).then(answers => {
-                let newRoleId, emp_updated_id;
-                let update = [];
-                console.log(answers);
-                const { employee_updated, newRole } = answers;
-                result.forEach((role) => {
-                    if (newRole === role.title) {
-                        newRoleId = role.id;
-                        // update.push(newRoleId);
-                    }
-                });
-                result.forEach((employee) => {
-                    if (employee_updated === `${employee.first_name} ${employee.last_name}`) {
-                        emp_updated_id = employee.id;
-                        // update.push(emp_updated_id);
-                    }
-                });
-                // console.log(update);
-                let sqlUpdate = `UPDATE employee SET employee.role_id = ? WHERE employee.id=?;`;
+            },
+            {
+                type: 'list',
+                name: 'newRole',
+                message: 'Please select the updated Role',
+                choices: rolesArr
+            }
+        ]).then(answers => {
+            // console.log(answers);
+            let newRoleId;
+            let emp_updated_id = answers.employeeId;
+            let newRole = answers.newRole;
+            // let update = [];
 
-                db.query(sqlUpdate, [newRoleId, emp_updated_id], (err) => {
-                    if (err) throw err;
-                    console.log(' ');
-                    console.log(`Employee ${employee_updated} Role was Successfully Updated tp ${newRole}`);
-                    startApp();
-                })
-
+            // const { emp_updated_id, newRole } = answers;
+            // console.log(employee_updated_id, newRole);
+            result.forEach((role) => {
+                if (newRole === role.title) {
+                    newRoleId = role.id;
+                    // update.push(newRoleId);
+                }
             });
+            // result.forEach((employee) => {
+            //     console.log(employee.last_name);
+            //     if (answers.employee_updated === `${employee.first_name} ${employee.last_name}`) {
+            //         employeeId = employee.id;
+            //     }
+            // });
+
+
+            let sqlUpdate = `UPDATE employee SET employee.role_id = ? WHERE employee.id=?;`;
+
+            db.query(sqlUpdate, [newRoleId, emp_updated_id], (err) => {
+                if (err) throw err;
+                console.log(' ');
+                console.log(`Employee Role was Successfully Updated`);
+                startApp();
+            })
+
         });
     });
+    // });
 };
